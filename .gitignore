@@ -1,0 +1,10 @@
+# Ignorar arquivos e pastas grandes
+*.pkl
+*.parquet
+*.csv
+*.xlsx
+/models/
+/__pycache__/
+/.venv/
+/venv/
+.DS_Store
