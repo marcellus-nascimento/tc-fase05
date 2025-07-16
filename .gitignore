@@ -8,3 +8,7 @@
 /.venv/
 /venv/
 .DS_Store
+# Dados pesados (não versionar)
+applicants.json
+jobs.json
+prospects.json
