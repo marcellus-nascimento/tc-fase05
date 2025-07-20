@@ -25,16 +25,17 @@ with st.sidebar:
 # -----------------
 # Carregamento Seguro
 # -----------------
-MODELS_PATH = "models"
+MODELS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models"))
 try:
     modelo = joblib.load(os.path.join(MODELS_PATH, "melhor_modelo_multimodal.pkl"))
     cat_encoder = joblib.load(os.path.join(MODELS_PATH, "cat_encoder.pkl"))
     sbert_encoder = joblib.load(os.path.join(MODELS_PATH, "sbert_encoder.pkl"))
     embeddings_vagas = np.load(os.path.join(MODELS_PATH, "vagas_embeddings.npy"))
-    df_vagas = pd.read_csv("vagas_unicas.csv")
+    df_vagas = pd.read_csv(os.path.join(MODELS_PATH, "..", "vagas_unicas.csv"))
 except Exception as e:
     st.error(f"Erro ao carregar modelos ou dados: {e}")
     st.stop()
+
 
 # -----------------
 # Funções
@@ -43,19 +44,30 @@ def gerar_embedding(texto):
     return sbert_encoder.encode([texto])[0]
 
 def recomendar_vagas(embedding_cv, top_k=3):
+    if embedding_cv is None or len(embedding_cv) == 0:
+        raise ValueError("Embedding do CV está vazio ou inválido.")
+
     scores = util.cos_sim(embedding_cv, embeddings_vagas)[0]
+    scores = scores.cpu().numpy() if hasattr(scores, "cpu") else np.array(scores)
+
+    if len(scores) == 0 or top_k <= 0:
+        raise ValueError("Não foi possível calcular a similaridade.")
+
     top_indices = np.argsort(scores)[::-1][:top_k]
+
     vagas = []
     for idx in top_indices:
         row = df_vagas.iloc[idx]
         vagas.append({
-            "codigo": int(row["codigo"]),
+            "codigo": int(row["codigo_vaga"]),
             "titulo": row["titulo_vaga"],
             "similaridade": round(float(scores[idx]), 4),
-            "atividades": row["atividades_principais"],
-            "competencias": row["requisitos"]
+            "atividades": row["principais_atividades"],
+            "competencias": row["competencias"]
         })
     return vagas
+
+
 
 # -----------------
 # Formulário
