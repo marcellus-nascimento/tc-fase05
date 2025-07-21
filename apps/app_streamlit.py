@@ -26,6 +26,8 @@ with st.sidebar:
 # Carregamento Seguro
 # -----------------
 MODELS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models"))
+BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 try:
     modelo = joblib.load(os.path.join(MODELS_PATH, "melhor_modelo_multimodal.pkl"))
     cat_encoder = joblib.load(os.path.join(MODELS_PATH, "cat_encoder.pkl"))
@@ -33,7 +35,7 @@ try:
     # 🔁 Substitui o uso de arquivo .pkl
     sbert_encoder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-    embeddings_vagas = np.load(os.path.join(MODELS_PATH, "vagas_embeddings.npy"))
+    embeddings_vagas = np.load(os.path.join(BASE_PATH, "vagas_embeddings.npy"))
     df_vagas = pd.read_csv(os.path.join(MODELS_PATH, "..", "vagas_unicas.csv"))
 except Exception as e:
     st.error(f"Erro ao carregar modelos ou dados: {e}")
