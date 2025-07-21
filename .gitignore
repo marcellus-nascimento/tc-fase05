@@ -10,6 +10,7 @@ models/y_train.pkl
 models/y_test.pkl
 models/melhor_modelo_sbert.pkl
 models/melhor_vectorizer.pkl
+models/sbert_encoder.pkl
 models/transformer.pkl
 models/best_model.pkl
 models/best_model_info.txt
