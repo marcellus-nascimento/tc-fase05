@@ -1,15 +1,25 @@
-# Ignorar arquivos e pastas grandes
-*.pkl
+# Ambiente virtual e cache
+venv/
+__pycache__/
+*.pyc
+
+# Arquivos grandes de treino (não usados no deploy)
+models/sbert_encoder.pkl
+models/X_train.pkl
+models/X_test.pkl
+models/y_train.pkl
+models/y_test.pkl
+models/melhor_modelo_sbert.pkl
+models/melhor_vectorizer.pkl
+models/transformer.pkl
+models/best_model.pkl
+models/best_model_info.txt
+
+# Arquivos de testes e temporários
+*.ipynb
 *.parquet
-*.csv
-*.xlsx
-/models/
-/__pycache__/
-/.venv/
-/venv/
-.DS_Store
-# Dados pesados (não versionar)
-applicants.json
-jobs.json
-prospects.json
-"applicants.json" 
+*.json
+*.log
+test_*.py
+
+
